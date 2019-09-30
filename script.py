@@ -1,7 +1,12 @@
+# TODO: Remove images from cache after setting background. Maybe keep images used in past 24 hours.
+# TODO: Make adjustments to set query from commandline or use defaults
+# TODO: Set up a loop to reset background 3x per day
+
 from auth import ACCESS_KEY, SECRET_KEY
 from subprocess import Popen, PIPE, call
 import requests
 import os
+import sys
 
 
 cache_dir = os.path.join(os.getcwd(), "cache/")
@@ -54,8 +59,21 @@ def set_background(filename):
     return True
 
 
+def unpack_argv(argv):
+    kwargs = {}
+    if len(argv) % 2 == 1:
+        if len(argv) == 1:
+            kwargs['query'] = argv[0]
+            return kwargs
+        else:
+            print("Error: illegal command line arguments.")
+            quit(-1)
+    
+
+
 if __name__ == "__main__":
-    filename, image_json = save_random_image(query="mountains, ice")
+    kwargs = unpack_argv(sys.argv[1:]) if len(sys.argv) > 1 else None
+    filename, image_json = save_random_image(**kwargs)
     # print(image_json['description'])
     print(image_json['user']['username'])
     # print(image_json['exif'])
