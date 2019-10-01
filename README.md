@@ -1,8 +1,6 @@
 # desktop-setter
 Easily change your desktop background on macOS Mojave to a professional image matching your query. 
 
-Uses AppleScript to 
-
 Requires python 3.6 or higher.
 
 ## Using desktop-setter
@@ -19,7 +17,12 @@ For example, if I want an image featuring a cityscape, I can use the `query` par
 python change_background.py query="cityscape"
 ```
 
-## Things left to do:
+## How it works
+`change_background.py` makes a request to [UnSplash](https://api.unsplash.com/). This request returns a url for a high-resolution image which is then downloaded to the relative directory `cache/`. 
+`change_background.py` then runs a short AppleScript program to then set the desktop background to the downloaded image.
+
+
+## Things left to do
  - Improve this documentation
  - Improve defaults for screen dimensions
  - Improve command-line argument detection and implement help/manual
