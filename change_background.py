@@ -1,9 +1,6 @@
-# TODO: Rework how kwargs are passed to get_random_image and save_random_image
-# TODO: Define list of possible command-line arguments and implement helper
-
-import requests
 import os
 import sys
+import requests
 import datetime as dt
 from auth import ACCESS_KEY, SECRET_KEY
 from subprocess import Popen, PIPE, call
@@ -117,7 +114,8 @@ if __name__ == "__main__":
     filename, image_json = get_and_save_image(**kwargs)
     success = set_background(filename)
     if success:
-        print(f"Set file: {filename} as desktop image")
+        print(f"Set file: {filename} as desktop image at {str(dt.datetime.now())}")
+        print(f"Image Description: {image_json['description']}")
     else:
         print(f"ERROR: Unable to set file: {filename} as desktop image")
 
