@@ -67,6 +67,3 @@ if __name__ == "__main__":
     image_folder = sys.argv[1]
     loop_interval = float(sys.argv[2])
     loop(image_folder, loop_interval)
-
-
-.
