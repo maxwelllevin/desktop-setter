@@ -1,8 +1,11 @@
 import os
 import sys
 import time
+import ctypes
+import platform
 import datetime as dt
 from subprocess import Popen, PIPE, call
+
 
 
 # Global settings
@@ -12,13 +15,17 @@ screen_height = 1600
 
 def set_background(filename):
     """
-    Uses applescript to set the desktop background.
-    Returns True if successful.
+    Sets the desktop background.
     """
-    # Applescript:
-    cmd = f'/usr/bin/osascript<<END\ntell application "Finder"\nset desktop picture to POSIX file "{filename}"\nend tell\nEND'
-    Popen(cmd, shell=True)
-    call(["killall Dock"], shell=True)
+    if platform.system() == "Darwin":
+        # Applescript:
+        cmd = f'/usr/bin/osascript<<END\ntell application "Finder"\nset desktop picture to POSIX file "{filename}"\nend tell\nEND'
+        Popen(cmd, shell=True)
+        call(["killall Dock"], shell=True)
+        return
+    if platform.system() == "Windows":
+        ctypes.windll.user32.SystemParametersInfoW(20, 0, filename, 0)
+        return
 
 
 def loop(folder, interval):
@@ -61,9 +68,5 @@ if __name__ == "__main__":
     loop_interval = float(sys.argv[2])
     loop(image_folder, loop_interval)
 
-    # if success:
-    #     print(f"Set file: {filename} as desktop image at {str(dt.datetime.now())}")
-    #     print(f"Image Description: {image_json['description']}")
-    # else:
-    #     print(f"ERROR: Unable to set file: {filename} as desktop image")
 
+.

@@ -1,6 +1,8 @@
 import os
 import sys
+import ctypes
 import requests
+import platform
 import datetime as dt
 from auth import ACCESS_KEY, SECRET_KEY
 from subprocess import Popen, PIPE, call
@@ -8,8 +10,8 @@ from subprocess import Popen, PIPE, call
 
 # Global settings
 cache_dir = os.path.join(os.getcwd(), "cache/")
-screen_width = 2560
-screen_height = 1600
+screen_width = 3840
+screen_height = 2160
 
 
 # Makes a GET request to UnSplash with the provided paramters and returns a python response object
@@ -65,16 +67,19 @@ def clear_old_cache(time_kwargs={'hours': 1}):
 
 
 
-# Uses applescript to set the desktop background. Returns True unless an exception is raised.
 def set_background(filename):
-    # Formatting for the AppleScript command needs to be precise
-    cmd = f'/usr/bin/osascript<<END\ntell application "Finder"\nset desktop picture to POSIX file "{filename}"\nend tell\nEND'
-    try:
+    """
+    Sets the desktop background.
+    """
+    if platform.system() == "Darwin":
+        # Applescript:
+        cmd = f'/usr/bin/osascript<<END\ntell application "Finder"\nset desktop picture to POSIX file "{filename}"\nend tell\nEND'
         Popen(cmd, shell=True)
         call(["killall Dock"], shell=True)
-    except:
-        return False
-    return True
+        return
+    if platform.system() == "Windows":
+        ctypes.windll.user32.SystemParametersInfoW(20, 0, filename, 0)
+        return
 
 
 # Defines the default keyword arguments used in the GET request to unsplash.com
@@ -113,9 +118,6 @@ if __name__ == "__main__":
     kwargs = read_args(sys.argv)
     filename, image_json = get_and_save_image(**kwargs)
     success = set_background(filename)
-    if success:
-        print(f"Set file: {filename} as desktop image at {str(dt.datetime.now())}")
-        print(f"Image Description: {image_json['description']}")
-    else:
-        print(f"ERROR: Unable to set file: {filename} as desktop image")
+    print(f"Set file: {filename} as desktop image at {str(dt.datetime.now())}")
+    print(f"Image Description: {image_json['description']}")
 
