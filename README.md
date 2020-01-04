@@ -1,7 +1,7 @@
 # desktop-setter
 Easily change your desktop background on macOS X+ or Windows 10 to a professional image matching your query. 
 
-Requires python 3.6 or higher.
+Requires python 3.6 or higher. 
 
 ## Using desktop-setter
 
@@ -33,6 +33,7 @@ If you are using the zsh terminal and you do not have watch installed, you can i
 
 ## Things left to do
  - Improve defaults for screen dimensions
+ - Remove 'query=' from unsplash.py in favor of first argument being the query 
  - Improve command-line argument detection and implement help/manual
  - Add capability for Linux
  - Add Siri or touchbar controls for mac
